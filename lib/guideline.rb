@@ -1,5 +1,7 @@
-require "guideline/version"
+require "ostruct"
+require "active_support/all"
 
-module Guideline
-  # Your code goes here...
-end
+require "guideline/version"
+require "guideline/visitor"
+require "guideline/checker"
+require "guideline/checker/long_line_checker"
