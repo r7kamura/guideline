@@ -1,22 +1,20 @@
 module Guideline
   class LongLineChecker < Checker
     def check(path)
-      lines(path).each_with_index do |line, index|
-        if line.has_error?
-          add_error(
-            :message => line.message,
-            :path    => path,
-            :line    => index + 1
-          )
-        end
+      lines(path).select(&:has_error?).each do |line|
+        add_error(
+          :line    => line.lineno,
+          :message => line.message,
+          :path    => path
+        )
       end
     end
 
     private
 
     def lines(path)
-      path.each_line.map do |line|
-        LineChecker.new(line, :max => max)
+      path.each_line.map.with_index do |line, index|
+        LineChecker.new(line, :max => max, :lineno => index + 1)
       end
     end
 
@@ -46,6 +44,10 @@ module Guideline
 
       def length
         @line.split(//).length
+      end
+
+      def lineno
+        @options[:lineno]
       end
     end
   end
