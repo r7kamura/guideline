@@ -12,7 +12,7 @@ module Guideline
 
     def check
       travel
-      errors
+      self
     end
 
     def render
@@ -63,17 +63,27 @@ module Guideline
       private
 
       def found_paths
-        search_paths(options[:only] || "**/*.rb")
+        Pathname.glob(only_pattern)
       end
 
       def excepted_paths
-        search_paths(options[:except])
+        if except_pattern
+          Pathname.glob(only_pattern)
+        else
+          []
+        end
       end
 
-      def search_paths(patterns)
-        Array(patterns).inject([]) do |paths, pattern|
-          paths + Pathname.glob(pattern)
+      def only_pattern
+        if options[:only]
+          "#{options[:only]}/**/*.rb"
+        else
+          "**/*.rb"
         end
+      end
+
+      def except_pattern
+        options[:except]
       end
     end
   end

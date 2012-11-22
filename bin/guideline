@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path("../../lib/", __FILE__)
+require "guideline"
+require "yaml"
+require "slop"
+require "active_support/all"
+
+def parse_options
+  Slop.parse(:help => true) do
+    banner "Usage: guidline [directory] [options]"
+    on :c, :config, "path to guideline.yml"
+  end
+end
+
+def load_config(options)
+  path = options[:config] || File.expand_path("../../guideline.yml", __FILE__)
+  hash = YAML.load_file(path)
+  HashWithIndifferentAccess.new(hash)
+end
+
+options = parse_options
+config  = load_config(options)
+
+Guideline::Visitor.new(
+  :only    => ARGV[0],
+  :checker => Guideline::CheckerFactory.new(
+    config,
+    Guideline::LongLineChecker,
+    Guideline::LongMethodChecker,
+    Guideline::HardTabIndentChecker
+  ).create
+).check.render

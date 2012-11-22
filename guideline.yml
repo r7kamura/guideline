@@ -1,0 +1,4 @@
+"Guideline::LongLineChecker":
+  max: 80
+"Guideline::LongMethodChecker":
+  max: 10
