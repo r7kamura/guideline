@@ -3,7 +3,7 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "guideline"
 
-checker = Guideline::LongLineChecker.new(:max => 80)
+checker = Guideline::LongMethodChecker.new(:max => 5)
 visitor = Guideline::Visitor.new(:checker => checker)
 visitor.check
 visitor.render

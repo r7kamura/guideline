@@ -9,7 +9,7 @@ module Guideline
     end
 
     def add_error(options)
-      errors << OpenStruct.new(
+      errors << Error.new(
         :message => options[:message],
         :path    => options[:path],
         :line    => options[:line]

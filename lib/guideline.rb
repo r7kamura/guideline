@@ -1,7 +1,6 @@
-require "ostruct"
-require "active_support/all"
-
 require "guideline/version"
 require "guideline/visitor"
+require "guideline/error"
 require "guideline/checker"
 require "guideline/checker/long_line_checker"
+require "guideline/checker/long_method_checker"

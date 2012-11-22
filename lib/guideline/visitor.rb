@@ -1,4 +1,5 @@
 require "pathname"
+require "active_support/all"
 
 module Guideline
   class Visitor
@@ -12,6 +13,14 @@ module Guideline
     def check
       travel
       errors
+    end
+
+    def render
+      errors.group_by(&:path).each do |path, errors|
+        puts path
+        errors.each(&:render)
+        puts
+      end
     end
 
     private
