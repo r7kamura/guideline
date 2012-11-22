@@ -7,11 +7,7 @@ module Guideline
     end
 
     let(:visitor) do
-      described_class.new(:checker => checker)
-    end
-
-    let(:options) do
-      { :checker => checker }
+      described_class.new(:checker => [checker])
     end
 
     let(:checker) do
@@ -24,16 +20,6 @@ module Guideline
 
     let(:path) do
       mock
-    end
-
-    describe "#initialize" do
-      subject do
-        visitor
-      end
-
-      it "creates a new instance of #{described_class}" do
-        be_a described_class
-      end
     end
 
     describe "#check" do
