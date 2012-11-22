@@ -8,18 +8,21 @@ $ gem install guideline
 ```
 
 ## Usage
-https://github.com/r7kamura/guideline/tree/master/examples
 
 ```
-$ ruby examples/long_line_checker.rb
-spec/guideline/checker_spec.rb
-  27: Line length  88 should be less than  80 characters
+$ guideline
+lib/chatroid/adapter/campfire.rb
+  26: Line length  85 should be less than  80 characters
 
-$ ruby examples/long_method_checker.rb
-lib/guideline/checker/long_line_checker.rb
-   3: Too long   9 lines method <#check>
+lib/chatroid/adapter/twitter/event.rb
+  48: Line length  87 should be less than  80 characters
 
-lib/guideline/checker/long_method_checker.rb
-   6: Too long   9 lines method <#check>
-  42: Too long  10 lines method <#on_def>
+spec/chatroid/adapter/twitter/event_spec.rb
+  49: Line length  81 should be less than  80 characters
+
+spec/chatroid/adapter/twitter_spec.rb
+  30: Line length  85 should be less than  80 characters
+
+lib/chatroid/adapter/twitter.rb
+  19: Too long  12 lines method <#stream>
 ```
