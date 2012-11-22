@@ -18,21 +18,6 @@ module Guideline
       }
     end
 
-    describe "#initialize" do
-      subject do
-        instance
-      end
-
-      it "saves given options" do
-        described_class.new(options).instance_variable_get(:@options).should == options
-      end
-
-      it "can omit options" do
-        described_class.new.instance_variable_get(:@options).should == {}
-      end
-    end
-
-
     describe "#errors" do
       subject do
         instance.errors
