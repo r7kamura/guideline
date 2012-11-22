@@ -6,7 +6,7 @@ module Guideline
     def check(path)
       MethodParser.parse(path.read) do |method|
         if method.height > max
-          add_error(
+          report(
             :message => method.message,
             :line    => method.line,
             :path    => path

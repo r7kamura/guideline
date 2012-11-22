@@ -8,7 +8,7 @@ module Guideline
       @errors ||= []
     end
 
-    def add_error(options)
+    def report(options)
       errors << Error.new(
         :message => options[:message],
         :path    => options[:path],

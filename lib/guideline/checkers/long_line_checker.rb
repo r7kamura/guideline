@@ -2,7 +2,7 @@ module Guideline
   class LongLineChecker < Checker
     def check(path)
       lines(path).select(&:has_error?).each do |line|
-        add_error(
+        report(
           :line    => line.lineno,
           :message => line.message,
           :path    => path

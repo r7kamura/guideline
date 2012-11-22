@@ -28,9 +28,9 @@ module Guideline
       end
     end
 
-    describe "#add_error" do
+    describe "#report" do
       it "adds error record into its errors" do
-        instance.add_error(error)
+        instance.report(error)
         instance.errors.first.message.should == "message"
       end
     end
@@ -46,7 +46,7 @@ module Guideline
 
       context "when its errors is not empty" do
         before do
-          instance.add_error(error)
+          instance.report(error)
         end
 
         it { should be_true }
