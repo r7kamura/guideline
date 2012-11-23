@@ -19,10 +19,10 @@ module Guideline
       end
 
       it "creates instances of given classes with given config" do
-        LongLineChecker.should_receive(:new).with(:max => 80).and_call_original
-        LongMethodChecker.should_receive(:new).with(:max => 10).and_call_original
         checkers[0].should be_a LongLineChecker
         checkers[1].should be_a LongMethodChecker
+        checkers[0].send(:max).should == 80
+        checkers[1].send(:max).should == 10
       end
     end
   end
