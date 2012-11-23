@@ -54,6 +54,20 @@ module Guideline
         end
       end
 
+      context "when there is no last comma in multiline hash of new syntax" do
+        let(:script) do
+          <<-EOF
+            {
+              a: 1
+            }
+          EOF
+        end
+
+        specify "checker detects error" do
+          should have_error
+        end
+      end
+
       context "when there is no last comma in multiline hash with array" do
         let(:script) do
           <<-EOF
