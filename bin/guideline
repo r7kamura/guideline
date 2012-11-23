@@ -30,4 +30,4 @@ Guideline::Visitor.new(
     Guideline::LongMethodChecker,
     Guideline::HardTabIndentChecker
   ).create
-).check.render
+).visit.render

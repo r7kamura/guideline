@@ -10,8 +10,12 @@ module Guideline
       @block   = block
     end
 
-    def check
-      travel
+    def visit
+      paths.each do |path|
+        checkers.each do |checker|
+          checker.check(path)
+        end
+      end
       self
     end
 
@@ -24,14 +28,6 @@ module Guideline
     end
 
     private
-
-    def travel
-      paths.each do |path|
-        checkers.each do |checker|
-          checker.check(path)
-        end
-      end
-    end
 
     def paths
       PathFinder.find(options)

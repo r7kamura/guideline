@@ -22,14 +22,10 @@ module Guideline
       mock
     end
 
-    describe "#check" do
-      subject do
-        visitor.check
-      end
-
+    describe "#visit" do
       it "calls checker#check with matched path" do
         checker.should_receive(:check).with(path)
-        subject
+        visitor.visit
       end
     end
   end
