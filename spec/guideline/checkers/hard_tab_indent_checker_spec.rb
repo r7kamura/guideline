@@ -26,7 +26,7 @@ module Guideline
         end
       end
 
-      context "when there is no too long line" do
+      context "when there is no hard tab indent" do
         let(:content) do
           <<-EOF
             def foo
