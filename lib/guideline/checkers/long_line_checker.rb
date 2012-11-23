@@ -43,7 +43,7 @@ module Guideline
       end
 
       def length
-        @line.split(//).length
+        @line.split(//).length - 1
       end
 
       def lineno

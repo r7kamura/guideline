@@ -15,7 +15,7 @@ module Guideline
         let(:content) do
           <<-EOF
             def foo
-              too looooooooooooooooooooooooooooooooooooooooooooooooooooong line
+              too looooooooooooooooooooooooong line
             end
           EOF
         end
@@ -30,7 +30,7 @@ module Guideline
         let(:content) do
           <<-EOF
             def foo
-              not long line
+              not loooooooooooooooooooooooong line
             end
           EOF
         end
