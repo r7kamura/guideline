@@ -8,6 +8,7 @@ options = Runner.parse(ARGV)
 
 checkers = CheckerFactory.new(
   options[:config],
+  HashCommaChecker,
   LongLineChecker,
   LongMethodChecker,
   HardTabIndentChecker
