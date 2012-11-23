@@ -121,7 +121,7 @@ module Guideline
       end
 
       def increase_comma
-        comma[-1] += 1 if key[-1]
+        comma[-1] += 1 if comma[-1]
       end
     end
   end
