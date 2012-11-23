@@ -13,11 +13,11 @@ module Guideline
       end
 
       let(:path) do
-        mock(:read => content)
+        mock(:read => script)
       end
 
       context "when there is no last comma in sigleline hash" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             { :a => 1 }
           EOF
@@ -29,7 +29,7 @@ module Guideline
       end
 
       context "when there is last comma in sigleline hash" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             { :a => 1, }
           EOF
@@ -41,7 +41,7 @@ module Guideline
       end
 
       context "when there is no last comma in multiline hash" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             {
               :a => 1
@@ -55,7 +55,7 @@ module Guideline
       end
 
       context "when there is no last comma in multiline hash with array" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             {
               :a => [1, 2, 3]
@@ -69,7 +69,7 @@ module Guideline
       end
 
       context "when there is last comma in multiline hash" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             {
               :a => 1,
@@ -83,7 +83,7 @@ module Guideline
       end
 
       context "when there is no last comma in multiline nested hash" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             {
               :a => {
