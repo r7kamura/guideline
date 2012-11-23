@@ -8,11 +8,11 @@ module Guideline
       end
 
       let(:path) do
-        mock(:each_line => content.each_line)
+        mock(:each_line => script.each_line)
       end
 
       context "when there is hard tab indent" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             def foo
             \t1
@@ -27,7 +27,7 @@ module Guideline
       end
 
       context "when there is no hard tab indent" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             def foo
               1

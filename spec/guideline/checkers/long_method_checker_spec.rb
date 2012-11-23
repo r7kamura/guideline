@@ -8,11 +8,11 @@ module Guideline
       end
 
       let(:path) do
-        mock(:read => content)
+        mock(:read => script)
       end
 
       context "when there is too long method" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             def foo
               1
@@ -28,7 +28,7 @@ module Guideline
       end
 
       context "when there is no too long method" do
-        let(:content) do
+        let(:script) do
           <<-EOF
             def foo
               1
