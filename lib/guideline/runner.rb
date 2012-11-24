@@ -8,6 +8,7 @@ module Guideline
     def parse(argv)
       hash = Parser.parse(argv)
       hash[:config] = load_config(hash[:config])
+      hash.delete(:help)
       hash
     end
 

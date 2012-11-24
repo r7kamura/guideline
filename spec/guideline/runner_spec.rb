@@ -7,17 +7,34 @@ module Guideline
         described_class.parse(argv)
       end
 
+      before do
+        YAML.stub(:load_file).and_return(config)
+      end
+
+      let(:config) do
+        { "a" => 1 }
+      end
+
       let(:path) do
         File.expand_path("../../../guideline.yml", __FILE__)
       end
 
-      context "when config option is passed" do
-        let(:argv) do
-          ["--config", path]
-        end
+      let(:argv) do
+        ["--config", path]
+      end
 
-        it "parses ARGV and returns options with config hash" do
-          should have_key(:config)
+      it "loads config option as YAML path" do
+        YAML.should_receive(:load_file).with(path)
+        subject
+      end
+
+      it "returns config option as HashWithIndifferentAccess" do
+        subject[:config].should be_a HashWithIndifferentAccess
+      end
+
+      context "when config option is passed" do
+        it "returns parsed options" do
+          should == { :config => config }
         end
       end
 
@@ -26,8 +43,8 @@ module Guideline
           ["-c", path]
         end
 
-        it "parses ARGV and returns options with config hash" do
-          should have_key(:config)
+        it "returns parsed options" do
+          should == { :config => config }
         end
       end
 
@@ -36,18 +53,9 @@ module Guideline
           []
         end
 
-        it "parses ARGV and returns options with config hash" do
+        it "returns parsed options with default config path" do
+          described_class.should_receive(:default_config_path)
           should have_key(:config)
-        end
-      end
-
-      context "when config option is wrong" do
-        let(:argv) do
-          ["--config", "wrong config path"]
-        end
-
-        it do
-          expect { subject }.to raise_error(StandardError)
         end
       end
     end
