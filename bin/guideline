@@ -8,6 +8,7 @@ options = Runner.parse(ARGV)
 
 checkers = CheckerFactory.new(
   options[:config],
+  UnusedMethodChecker,
   HashCommaChecker,
   LongLineChecker,
   LongMethodChecker,
@@ -15,5 +16,6 @@ checkers = CheckerFactory.new(
 ).create
 
 visitor = Visitor.new(:only => ARGV[0], :checker => checkers)
+visitor.prepare
 visitor.visit
 visitor.render
