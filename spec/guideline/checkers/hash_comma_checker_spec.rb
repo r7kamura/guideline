@@ -23,7 +23,7 @@ module Guideline
           EOF
         end
 
-        specify "checker does not detect error" do
+        it "does not detect error" do
           should_not have_error
         end
       end
@@ -35,7 +35,7 @@ module Guideline
           EOF
         end
 
-        specify "checker does not detect error" do
+        it "does not detect error" do
           should_not have_error
         end
       end
@@ -49,7 +49,7 @@ module Guideline
           EOF
         end
 
-        specify "checker detects error" do
+        it "detects error" do
           should have_error
         end
       end
@@ -63,7 +63,7 @@ module Guideline
           EOF
         end
 
-        specify "checker detects error" do
+        it "detects error" do
           should have_error
         end
       end
@@ -77,7 +77,7 @@ module Guideline
           EOF
         end
 
-        specify "checker detects error" do
+        it "detects error" do
           should have_error
         end
       end
@@ -91,7 +91,7 @@ module Guideline
           EOF
         end
 
-        specify "checker does not detect error" do
+        it "does not detect error" do
           should_not have_error
         end
       end
@@ -107,7 +107,7 @@ module Guideline
           EOF
         end
 
-        specify "checker detects error" do
+        it "detects error" do
           should have_error
         end
       end

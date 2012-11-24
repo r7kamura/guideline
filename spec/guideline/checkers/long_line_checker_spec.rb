@@ -20,7 +20,7 @@ module Guideline
           EOF
         end
 
-        specify "checker detects error" do
+        it "detects error" do
           checker.check(path)
           checker.should have_error
         end
@@ -35,7 +35,7 @@ module Guideline
           EOF
         end
 
-        specify "checker does not detect error" do
+        it "does not detect error" do
           checker.check(path)
           checker.should_not have_error
         end
