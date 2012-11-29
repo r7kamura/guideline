@@ -111,6 +111,20 @@ module Guideline
           should have_error
         end
       end
+
+      context "when there is embedded expansion brace" do
+        let(:script) do
+          <<-'EOF'
+            {
+              :a => "#{b}",
+            }
+          EOF
+        end
+
+        it "does not detect error" do
+          should_not have_error
+        end
+      end
     end
   end
 end

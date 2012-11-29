@@ -28,6 +28,10 @@ module Guideline
         push_stacks
       end
 
+      def on_embexpr_beg(token)
+        push_stacks
+      end
+
       def on_rbrace(token)
         call(lineno) if has_error?
         pop_stacks
