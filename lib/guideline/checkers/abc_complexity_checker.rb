@@ -11,12 +11,18 @@ module Guideline
     private
 
     def checker
-      AbcParser.new do |complexity, method, module_name|
+      AbcParser.new do |complexity, method, module_name, class_method_flag|
         if complexity > max
           report(
             :path    => @current_path,
             :line    => method.line,
-            :message => "Too abc-complex (%3d) method<#{module_name} #{method.method_name}>" % complexity
+            :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
+              module_name,
+              class_method_flag ? "." : "#",
+              method.method_name,
+              complexity,
+              max,
+            ]
           )
         end
       end
@@ -74,7 +80,7 @@ module Guideline
       attr_reader :assignment, :branch, :condition
 
       interesting_files /.*\.rb/
-      interesting_nodes :def, :binary, *ALL_NODES
+      interesting_nodes :def, :defs, :binary, *ALL_NODES
 
       ASSIGNMENT_NODES.each do |name|
         add_callback :"start_#{name}" do |node|
@@ -99,8 +105,18 @@ module Guideline
         clear
       end
 
+      add_callback :start_defs do |node|
+        @current_method = node
+        clear
+      end
+
       add_callback :end_def do |node|
-        @callback.call(complexity, @current_method, current_module_name)
+        @callback.call(complexity, @current_method, current_module_name, false)
+        @current_method = nil
+      end
+
+      add_callback :end_defs do |node|
+        @callback.call(complexity, @current_method, current_module_name, true)
         @current_method = nil
       end
 
