@@ -11,12 +11,12 @@ module Guideline
     private
 
     def checker
-      AbcParser.new do |complexity, method|
+      AbcParser.new do |complexity, method, module_name|
         if complexity > max
           report(
             :path    => @current_path,
             :line    => method.line,
-            :message => "Too abc-complex (%3d) method<#{method.method_name}>" % complexity
+            :message => "Too abc-complex (%3d) method<#{module_name} #{method.method_name}>" % complexity
           )
         end
       end
@@ -30,12 +30,46 @@ module Guideline
       @options[:max]
     end
 
+    module Moduleable
+      def self.included(base)
+        base.class_eval do
+          interesting_nodes :class, :module
+
+          add_callback :start_class do |node|
+            modules << node.class_name.to_s
+          end
+
+          add_callback :start_module do |node|
+            modules << node.module_name.to_s
+          end
+
+          add_callback :end_class do |node|
+            modules.pop
+          end
+
+          add_callback :end_module do |node|
+            modules.pop
+          end
+        end
+      end
+
+      def current_module_name
+        modules.join("::")
+      end
+
+      def modules
+        @moduels ||= []
+      end
+    end
+
     class AbcParser <  CodeAnalyzer::Checker
       ASSIGNMENT_NODES = [:assign, :opassign]
       BRANCH_NODES     = [:call, :fcall, :vcall, :brace_block, :do_block]
       CONDITION_NODES  = [:else]
       CONDITION_TOKENS = [:==, :===, :"<>", :"<=", :">=", :"=~", :>, :<, :"<=>"]
       ALL_NODES        = ASSIGNMENT_NODES + BRANCH_NODES + CONDITION_NODES
+
+      include Moduleable
 
       attr_reader :assignment, :branch, :condition
 
@@ -66,7 +100,7 @@ module Guideline
       end
 
       add_callback :end_def do |node|
-        @callback.call(complexity, @current_method)
+        @callback.call(complexity, @current_method, current_module_name)
         @current_method = nil
       end
 
