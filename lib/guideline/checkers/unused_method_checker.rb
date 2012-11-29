@@ -12,6 +12,8 @@ module Guideline
       call_visitor.check(path.to_s, path.read)
     end
 
+    private
+
     def calls
       @calls ||= []
     end
