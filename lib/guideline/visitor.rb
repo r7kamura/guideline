@@ -16,7 +16,14 @@ module Guideline
           checker.check(path)
         end
       end
-      self
+    end
+
+    def prepare
+      paths.each do |path|
+        checkers.each do |checker|
+          checker.prepare(path) if checker.respond_to?(:prepare)
+        end
+      end
     end
 
     def render

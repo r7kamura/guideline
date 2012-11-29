@@ -23,9 +23,33 @@ module Guideline
     end
 
     describe "#visit" do
-      it "calls checker#check with matched path" do
+      it "calls checker#check with path" do
         checker.should_receive(:check).with(path)
         visitor.visit
+      end
+    end
+
+    describe "#prepare" do
+      context "if checker can respond to #prepare" do
+        before do
+          checker.stub(:respond_to?).with(:prepare).and_return(true)
+        end
+
+        it "calls checker#prepare with path" do
+          checker.should_receive(:prepare).with(path)
+          visitor.prepare
+        end
+      end
+
+      context "if checker cannot respond to #prepare" do
+        before do
+          checker.stub(:respond_to?).with(:prepare).and_return(false)
+        end
+
+        it "does not call checker#prepare with path" do
+          checker.should_not_receive(:prepare)
+          visitor.prepare
+        end
       end
     end
   end
