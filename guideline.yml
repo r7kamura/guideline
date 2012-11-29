@@ -2,3 +2,5 @@
   max: 80
 "Guideline::LongMethodChecker":
   max: 10
+"Guideline::AbcComplexityChecker":
+  max: 10
