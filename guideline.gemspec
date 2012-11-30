@@ -8,7 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Guideline::VERSION
   gem.authors       = ["Ryo NAKAMURA"]
   gem.email         = ["r7kamura@gmail.com"]
-  gem.description   = "Guideline.gem checks if your code observes your coding guidelines"
+  gem.description   = "Guideline.gem checks that your code is protecting" +
+                      "the rule of coding guideline"
   gem.summary       = "The guideline of your code"
   gem.homepage      = "https://github.com/r7kamura/guideline"
 
