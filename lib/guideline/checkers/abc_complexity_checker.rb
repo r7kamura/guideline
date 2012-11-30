@@ -70,7 +70,7 @@ module Guideline
 
     class AbcParser <  CodeAnalyzer::Checker
       ASSIGNMENT_NODES = [:assign, :opassign]
-      BRANCH_NODES     = [:call, :fcall, :vcall, :brace_block, :do_block]
+      BRANCH_NODES     = [:call, :fcall, :vcall, :zsuper, :yield0, :brace_block, :do_block]
       CONDITION_NODES  = [:else]
       CONDITION_TOKENS = [:==, :===, :"<>", :"<=", :">=", :"=~", :>, :<, :"<=>"]
       ALL_NODES        = ASSIGNMENT_NODES + BRANCH_NODES + CONDITION_NODES
@@ -80,7 +80,7 @@ module Guideline
       attr_reader :assignment, :branch, :condition
 
       interesting_files /.*\.rb/
-      interesting_nodes :def, :defs, :binary, *ALL_NODES
+      interesting_nodes :def, :defs, :binary, :zsuper, *ALL_NODES
 
       ASSIGNMENT_NODES.each do |name|
         add_callback :"start_#{name}" do |node|

@@ -142,6 +142,30 @@ module Guideline
         end
         it { should have_error }
       end
+
+      context "when there is too much yield" do
+        let(:script) do
+          <<-EOF
+            def a
+              yield
+              yield
+            end
+          EOF
+        end
+        it { should have_error }
+      end
+
+      context "when there is too much super" do
+        let(:script) do
+          <<-EOF
+            def a
+              super
+              super
+            end
+          EOF
+        end
+        it { should have_error }
+      end
     end
   end
 end
