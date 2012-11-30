@@ -72,7 +72,7 @@ module Guideline
       ASSIGNMENT_NODES = [:assign, :opassign]
       BRANCH_NODES     = [:call, :fcall, :vcall, :zsuper, :yield0, :brace_block, :do_block]
       CONDITION_NODES  = [:else]
-      CONDITION_TOKENS = [:==, :===, :"<>", :"<=", :">=", :"=~", :>, :<, :"<=>"]
+      CONDITION_TOKENS = [:==, :===, :"<>", :<=, :>=, :=~, :>, :<, :<=>]
       ALL_NODES        = ASSIGNMENT_NODES + BRANCH_NODES + CONDITION_NODES
 
       include Moduleable
