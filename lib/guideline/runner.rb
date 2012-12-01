@@ -88,7 +88,7 @@ module Guideline
           banner "Usage: guideline [directory] [options]"
           on :c=, :config=, "Path to config YAML file."
           on :i, :init, "Generate config YAML template into current directory."
-          on :v, :version, "Show version number"
+          on :v, :version, "Show version number."
         end
       end
     end

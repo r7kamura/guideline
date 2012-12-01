@@ -21,9 +21,10 @@ $ gem install guideline
 ```
 $ guideline --help
 Usage: guideline [directory] [options]
-    -c, --config      Path to config YAML file.
-    -i, --init        Generate config YAML template into current directory.
-    -h, --help        Display this help message.
+    -c, --config       Path to config YAML file.
+    -i, --init         Generate config YAML template into current directory.
+    -v, --version      Show version number.
+    -h, --help         Display this help message.
 ```
 
 ```
