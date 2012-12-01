@@ -1,9 +1,12 @@
 require "yaml"
+require "fileutils"
 require "slop"
 require "active_support/core_ext/hash/indifferent_access"
 
 module Guideline
   class Runner
+    CONFIG_FILE_NAME = ".guideline.yml"
+
     def self.parse(*argv)
       new(*argv).parse
     end
@@ -13,6 +16,7 @@ module Guideline
     end
 
     def parse
+      generate_default_config_file if @hash[:init]
       @hash[:config] = load_config
       @hash.delete(:help)
       @hash
@@ -23,7 +27,8 @@ module Guideline
     def load_config
       YAML.load_file(config_path)
     rescue Errno::ENOENT
-      raise "No such config file - #{config_path}"
+      puts "No such config file - #{config_path}"
+      exit
     end
 
     def config_path
@@ -31,7 +36,21 @@ module Guideline
     end
 
     def default_config_path
-      File.expand_path("../../../guideline.yml", __FILE__)
+      File.expand_path("../../../#{CONFIG_FILE_NAME}", __FILE__)
+    end
+
+    def generate_default_config_file
+      if config_file_exist?
+        puts "./#{CONFIG_FILE_NAME} already exists"
+      else
+        FileUtils.copy(default_config_path, "./")
+        puts "./#{CONFIG_FILE_NAME} was generated"
+      end
+      exit
+    end
+
+    def config_file_exist?
+      File.exist?(CONFIG_FILE_NAME)
     end
 
     class Parser
@@ -53,7 +72,8 @@ module Guideline
       def slop
         @slop ||= Slop.new(:help => true) do
           banner "Usage: guideline [directory] [options]"
-          on :c=, :config=, "Path to config YAML file"
+          on :c=, :config=, "Path to config YAML file."
+          on :i, :init, "Generate config YAML template into current directory."
         end
       end
     end

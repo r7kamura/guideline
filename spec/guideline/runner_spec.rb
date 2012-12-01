@@ -7,11 +7,43 @@ module Guideline
         described_class.parse(argv)
       end
 
+      before do
+        described_class.any_instance.stub(:puts)
+      end
+
       let(:argv) do
         []
       end
 
       it { should be_a HashWithIndifferentAccess }
+
+      context "when given --init option" do
+        let(:argv) do
+          ["--init"]
+        end
+
+        context "when config file already exists" do
+          before do
+            described_class.any_instance.stub(:config_file_exist? => true)
+          end
+
+          it "does not generate config file" do
+            FileUtils.should_not_receive(:copy)
+            expect { subject }.to raise_error(SystemExit)
+          end
+        end
+
+        context "when config file does not exist" do
+          before do
+            described_class.any_instance.stub(:config_file_exist? => false)
+          end
+
+          it "generates config file" do
+            FileUtils.should_receive(:copy)
+            expect { subject }.to raise_error(SystemExit)
+          end
+        end
+      end
 
       context "when not given --config option" do
         it "returns default config parsed from guideline.yml" do
@@ -27,6 +59,7 @@ module Guideline
                 "max" => 10,
               },
             },
+            "init" => nil,
           }
         end
       end
@@ -45,6 +78,7 @@ module Guideline
             "config" => {
               "a" => "b",
             },
+            "init" => nil,
           }
         end
       end
