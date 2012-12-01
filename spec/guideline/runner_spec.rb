@@ -8,11 +8,15 @@ module Guideline
       end
 
       before do
-        described_class.any_instance.stub(:puts)
+        runner.stub(:puts)
       end
 
       let(:argv) do
         []
+      end
+
+      let(:runner) do
+        described_class.any_instance
       end
 
       it { should be_a HashWithIndifferentAccess }
@@ -24,7 +28,7 @@ module Guideline
 
         context "when config file already exists" do
           before do
-            described_class.any_instance.stub(:config_file_exist? => true)
+            File.stub(:exist? => true)
           end
 
           it "does not generate config file" do
@@ -35,13 +39,24 @@ module Guideline
 
         context "when config file does not exist" do
           before do
-            described_class.any_instance.stub(:config_file_exist? => false)
+            File.stub(:exist? => false)
           end
 
           it "generates config file" do
             FileUtils.should_receive(:copy)
             expect { subject }.to raise_error(SystemExit)
           end
+        end
+      end
+
+      context "when given --version option" do
+        let(:argv) do
+          ["--version"]
+        end
+
+        it "shows current version number and exit" do
+          runner.should_receive(:puts).with(VERSION)
+          expect { subject }.to raise_error(SystemExit)
         end
       end
 

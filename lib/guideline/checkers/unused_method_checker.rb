@@ -89,7 +89,7 @@ module Guideline
 
     class MethodCallChecker < MethodChecker
       interesting_files /.*\.rb/
-      interesting_nodes :call, :fcall, :vcall, :var_ref
+      interesting_nodes :call, :fcall, :vcall
 
       add_callback :start_call do |node|
         call(node.message.to_s)
@@ -100,10 +100,6 @@ module Guideline
       end
 
       add_callback :start_vcall do |node|
-        call(node.to_s)
-      end
-
-      add_callback :start_var_ref do |node|
         call(node.to_s)
       end
     end

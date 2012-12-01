@@ -166,6 +166,60 @@ module Guideline
         end
         it { should have_error }
       end
+
+      context "when there is module definition" do
+        let(:script) do
+          <<-EOF
+            module ModuleName
+              def a
+                b.c
+              end
+            end
+          EOF
+        end
+        it "reports error method with module name" do
+          checker.should_receive(:report) do |args|
+            args[:message].should include("ModuleName#a")
+          end
+          subject
+        end
+      end
+
+      context "when there is class definition" do
+        let(:script) do
+          <<-EOF
+            class ClassName
+              def a
+                b.c
+              end
+            end
+          EOF
+        end
+        it "reports error method with class name" do
+          checker.should_receive(:report) do |args|
+            args[:message].should include("ClassName#a")
+          end
+          subject
+        end
+      end
+
+      context "when there is class method definition" do
+        let(:script) do
+          <<-EOF
+            class ClassName
+              def self.a
+                b.c
+              end
+            end
+          EOF
+        end
+        it "reports error class method with class name" do
+          checker.should_receive(:report) do |args|
+            args[:message].should include("ClassName.a")
+          end
+          subject
+        end
+      end
     end
   end
 end
