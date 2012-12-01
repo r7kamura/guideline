@@ -20,8 +20,8 @@ $ gem install guideline
 ## Usage
 ```
 $ guideline --help
-Usage: guidline [directory] [options]
-    -c, --config      path to config YAML file
+Usage: guideline [directory] [options]
+    -c, --config      Path to config YAML file
     -h, --help        Display this help message.
 ```
 

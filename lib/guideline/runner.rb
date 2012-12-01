@@ -3,26 +3,31 @@ require "slop"
 require "active_support/core_ext/hash/indifferent_access"
 
 module Guideline
-  module Runner
-    extend self
+  class Runner
+    def self.parse(*argv)
+      new(*argv).parse
+    end
 
-    def parse(argv)
-      hash = Parser.parse(argv)
-      hash[:config] = load_config(hash[:config])
-      hash.delete(:help)
-      hash
+    def initialize(argv)
+      @hash = Parser.parse(argv).with_indifferent_access
+    end
+
+    def parse
+      @hash[:config] = load_config
+      @hash.delete(:help)
+      @hash
     end
 
     private
 
-    def load_config(path)
-      load_yaml(path || default_config_path).with_indifferent_access
+    def load_config
+      YAML.load_file(config_path)
+    rescue Errno::ENOENT
+      raise "No such config file - #{config_path}"
     end
 
-    def load_yaml(path)
-      YAML.load_file(path)
-    rescue Errno::ENOENT
-      raise "No such config file - #{path}"
+    def config_path
+      @hash[:config] || default_config_path
     end
 
     def default_config_path
@@ -47,8 +52,8 @@ module Guideline
 
       def slop
         @slop ||= Slop.new(:help => true) do
-          banner "Usage: guidline [directory] [options]"
-          on :c=, :config=, "path to config YAML file"
+          banner "Usage: guideline [directory] [options]"
+          on :c=, :config=, "Path to config YAML file"
         end
       end
     end
