@@ -60,6 +60,7 @@ module Guideline
               },
             },
             "init" => nil,
+            "version" => nil,
           }
         end
       end
@@ -79,6 +80,7 @@ module Guideline
               "a" => "b",
             },
             "init" => nil,
+            "version" => nil,
           }
         end
       end

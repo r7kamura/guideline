@@ -16,13 +16,27 @@ module Guideline
     end
 
     def parse
-      generate_default_config_file if @hash[:init]
+      before_hook
       @hash[:config] = load_config
       @hash.delete(:help)
       @hash
     end
 
     private
+
+    def before_hook
+      case
+      when @hash[:init]
+        generate_default_config_file
+      when @hash[:version]
+        show_version
+      end
+    end
+
+    def show_version
+      puts VERSION
+      exit
+    end
 
     def load_config
       YAML.load_file(config_path)
@@ -74,6 +88,7 @@ module Guideline
           banner "Usage: guideline [directory] [options]"
           on :c=, :config=, "Path to config YAML file."
           on :i, :init, "Generate config YAML template into current directory."
+          on :v, :version, "Show version number"
         end
       end
     end
