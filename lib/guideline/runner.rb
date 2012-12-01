@@ -1,5 +1,6 @@
 require "yaml"
 require "slop"
+require "active_support/core_ext/hash/indifferent_access"
 
 module Guideline
   module Runner
@@ -15,8 +16,7 @@ module Guideline
     private
 
     def load_config(path)
-      hash = load_yaml(path || default_config_path)
-      HashWithIndifferentAccess.new(hash)
+      load_yaml(path || default_config_path).with_indifferent_access
     end
 
     def load_yaml(path)

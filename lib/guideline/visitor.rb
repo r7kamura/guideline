@@ -1,5 +1,4 @@
 require "pathname"
-require "active_support/all"
 
 module Guideline
   class Visitor
