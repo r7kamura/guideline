@@ -70,18 +70,14 @@ module Guideline
 
       def excepted_paths
         if except_pattern
-          Pathname.glob(only_pattern)
+          Pathname.glob(except_pattern)
         else
           []
         end
       end
 
       def only_pattern
-        if options[:only]
-          "#{options[:only]}/**/*.rb"
-        else
-          "**/*.rb"
-        end
+        options[:only] || "**/*.rb"
       end
 
       def except_pattern
