@@ -36,38 +36,6 @@ module Guideline
       @options[:max]
     end
 
-    module Moduleable
-      def self.included(base)
-        base.class_eval do
-          interesting_nodes :class, :module
-
-          add_callback :start_class do |node|
-            modules << node.class_name.to_s
-          end
-
-          add_callback :start_module do |node|
-            modules << node.module_name.to_s
-          end
-
-          add_callback :end_class do |node|
-            modules.pop
-          end
-
-          add_callback :end_module do |node|
-            modules.pop
-          end
-        end
-      end
-
-      def current_module_name
-        modules.join("::")
-      end
-
-      def modules
-        @moduels ||= []
-      end
-    end
-
     class AbcParser <  CodeAnalyzer::Checker
       ASSIGNMENT_NODES = [:assign, :opassign]
       BRANCH_NODES     = [:call, :fcall, :vcall, :zsuper, :yield0, :brace_block, :do_block]
@@ -75,7 +43,7 @@ module Guideline
       CONDITION_TOKENS = [:==, :===, :"<>", :<=, :>=, :=~, :>, :<, :<=>]
       ALL_NODES        = ASSIGNMENT_NODES + BRANCH_NODES + CONDITION_NODES
 
-      include Moduleable
+      include Parser::Moduleable
 
       attr_reader :assignment, :branch, :condition
 

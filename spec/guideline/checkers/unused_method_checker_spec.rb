@@ -68,6 +68,44 @@ module Guideline
         checker.check(path)
         checker.send(:definitions).should be_empty
       end
+
+      context "when there is unused instance method" do
+        let(:script) do
+          <<-EOF
+            class A
+              def c
+                1
+              end
+            end
+          EOF
+        end
+
+        it "reports it as instance method" do
+          checker.should_receive(:report) do |args|
+            args[:message].should include("A#c")
+          end
+          checker.check(path)
+        end
+      end
+
+      context "when there is unused class method" do
+        let(:script) do
+          <<-EOF
+            class A
+              def self.c
+                1
+              end
+            end
+          EOF
+        end
+
+        it "reports it as class method" do
+          checker.should_receive(:report) do |args|
+            args[:message].should include("A.c")
+          end
+          checker.check(path)
+        end
+      end
     end
   end
 end

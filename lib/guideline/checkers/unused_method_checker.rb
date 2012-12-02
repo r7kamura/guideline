@@ -49,9 +49,13 @@ module Guideline
     def report_unused_methods(path)
       unused_methods.each do |method|
         report(
-          :message => "Remove unused method <#{method.name}>",
           :path    => path,
-          :line    => method.line
+          :line    => method.line,
+          :message => "Remove unused method <%s%s%s>" % [
+            method.module_name,
+            method.class_method ? "." : "#",
+            method.name,
+          ],
         )
       end
     end
@@ -78,12 +82,30 @@ module Guideline
     end
 
     class MethodDefinitionChecker < MethodChecker
+      include Parser::Moduleable
+
       interesting_files /.*\.rb/
-      interesting_nodes :def
+      interesting_nodes :def, :defs
 
       add_callback :start_def do |node|
-        definition = Definition.new(:line => node.line, :name => node.method_name.to_s)
-        call(definition)
+        call(
+          Definition.new(
+            :line        => node.line,
+            :name        => node.method_name.to_s,
+            :module_name => current_module_name,
+          )
+        )
+      end
+
+      add_callback :start_defs do |node|
+        call(
+          Definition.new(
+            :line         => node.line,
+            :name         => node.method_name.to_s,
+            :module_name  => current_module_name,
+            :class_method => true,
+          )
+        )
       end
     end
 
