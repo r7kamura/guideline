@@ -88,7 +88,7 @@ module Guideline
       end
 
       let(:error) do
-        mock(:path => "path")
+        mock(:path => "path", :line => 1)
       end
 
       it "calls #render of each error" do
