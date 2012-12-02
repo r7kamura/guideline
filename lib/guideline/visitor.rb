@@ -28,7 +28,7 @@ module Guideline
     def render
       errors.group_by(&:path).each do |path, errors|
         puts path
-        errors.each(&:render)
+        errors.sort_by(&:line).each(&:render)
         puts
       end
     end
