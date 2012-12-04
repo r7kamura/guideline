@@ -13,6 +13,7 @@ checkers = CheckerFactory.new(
   HashCommaChecker,
   LongLineChecker,
   LongMethodChecker,
+  TrailingWhitespaceChecker,
   HardTabIndentChecker
 ).create
 
