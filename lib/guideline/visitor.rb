@@ -77,11 +77,17 @@ module Guideline
       end
 
       def only_pattern
-        options[:only] || "**/*.rb"
+        if options[:only]
+          File.expand_path(options[:only])
+        else
+          File.expand_path("**/*.rb")
+        end
       end
 
       def except_pattern
-        options[:except]
+        if options[:except]
+          File.expand_path(options[:except])
+        end
       end
     end
   end

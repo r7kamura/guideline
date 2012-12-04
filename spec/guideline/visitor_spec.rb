@@ -19,17 +19,6 @@ module Guideline
         Pathname.new("spec/guideline/visitor_spec.rb")
       end
 
-      context "when :only option is not specified" do
-        it "visits all paths" do
-          called = false
-          checker.should_receive(:check).at_least(1) do |args|
-            called = true if args == path
-          end
-          visitor.visit
-          called.should be_true
-        end
-      end
-
       context "when :only option is specified" do
         before do
           options[:only] = "lib/**/*.rb"
