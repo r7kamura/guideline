@@ -220,6 +220,19 @@ module Guideline
           subject
         end
       end
+
+      context "when there is nested method" do
+        let(:script) do
+          <<-'EOF'
+            def a
+              def b
+                c
+              end
+            end
+          EOF
+        end
+        it { should_not have_error }
+      end
     end
   end
 end

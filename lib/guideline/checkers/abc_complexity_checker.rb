@@ -12,18 +12,22 @@ module Guideline
 
     def checker
       AbcParser.new do |complexity, method, module_name, class_method_flag|
-        if complexity > max
-          report(
-            :path    => @current_path,
-            :line    => method.line,
-            :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
-              module_name,
-              class_method_flag ? "." : "#",
-              method.method_name,
-              complexity,
-              max,
-            ]
-          )
+        begin
+          if complexity > max
+            report(
+              :path    => @current_path,
+              :line    => method.line,
+              :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
+                module_name,
+                class_method_flag ? "." : "#",
+                method.method_name,
+                complexity,
+                max,
+              ]
+            )
+          end
+        rescue Exception
+          require "pry"; binding.pry
         end
       end
     end
@@ -69,23 +73,21 @@ module Guideline
       end
 
       add_callback :start_def do |node|
-        @current_method = node
+        @current_method << node
         clear
       end
 
       add_callback :start_defs do |node|
-        @current_method = node
+        @current_method << node
         clear
       end
 
       add_callback :end_def do |node|
-        @callback.call(complexity, @current_method, current_module_name, false)
-        @current_method = nil
+        @callback.call(complexity, @current_method.pop, current_module_name, false)
       end
 
       add_callback :end_defs do |node|
-        @callback.call(complexity, @current_method, current_module_name, true)
-        @current_method = nil
+        @callback.call(complexity, @current_method.pop, current_module_name, true)
       end
 
       add_callback :start_binary do |node|
@@ -95,6 +97,7 @@ module Guideline
       def initialize(*, &callback)
         clear
         @callback = callback
+        @current_method = []
         super
       end
 
