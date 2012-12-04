@@ -1,4 +1,4 @@
-require "ripper"
+require "code_analyzer"
 
 module Guideline
   class AbcComplexityChecker < Checker
