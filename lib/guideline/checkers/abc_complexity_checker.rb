@@ -2,6 +2,8 @@ require "code_analyzer"
 
 module Guideline
   class AbcComplexityChecker < Checker
+    DEFAULT_MAX = 15
+
     def check(path)
       @current_path = path
       visitor.check(path.to_s, path.read)
@@ -33,7 +35,7 @@ module Guideline
     end
 
     def max
-      @options[:max]
+      (@options[:max] || DEFAULT_MAX).to_i
     end
 
     class AbcParser <  CodeAnalyzer::Checker

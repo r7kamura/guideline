@@ -1,6 +1,8 @@
 require "guideline/version"
+require "guideline/path_finder"
 require "guideline/visitor"
 require "guideline/error"
+require "guideline/option_parser"
 require "guideline/runner"
 require "guideline/parser/moduleable"
 require "guideline/checker_factory"

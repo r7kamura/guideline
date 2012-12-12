@@ -3,11 +3,15 @@ require "spec_helper"
 module Guideline
   describe Visitor do
     let(:visitor) do
-      described_class.new(options)
+      described_class.new(pattern, checkers)
     end
 
-    let(:options) do
-      { :checker => [checker] }
+    let(:pattern) do
+      nil
+    end
+
+    let(:checkers) do
+      [checker]
     end
 
     let(:checker) do
@@ -16,29 +20,16 @@ module Guideline
 
     describe "#visit" do
       let(:path) do
-        Pathname.new("spec/guideline/visitor_spec.rb")
+        Pathname.new(__FILE__)
       end
 
-      context "when :only option is specified" do
-        before do
-          options[:only] = "lib/**/*.rb"
-        end
-
-        it "does not visit paths which are not specified" do
-          checker.should_not_receive(:check).with(path)
-          visitor.visit
-        end
+      let(:pattern) do
+        path.to_s
       end
 
-      context "when :except option is specified" do
-        before do
-          options[:except] = "spec/**/*.rb"
-        end
-
-        it "does not visit paths which are specified" do
-          checker.should_not_receive(:check).with(path)
-          visitor.visit
-        end
+      it "calls checker.check with found paths" do
+        checker.should_receive(:check).with(path).at_least(1)
+        visitor.visit
       end
     end
 
