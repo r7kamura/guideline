@@ -12,22 +12,18 @@ module Guideline
 
     def checker
       AbcParser.new do |complexity, method, module_name, class_method_flag|
-        begin
-          if complexity > max
-            report(
-              :path    => @current_path,
-              :line    => method.line,
-              :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
-                module_name,
-                class_method_flag ? "." : "#",
-                method.method_name,
-                complexity,
-                max,
-              ]
-            )
-          end
-        rescue Exception
-          require "pry"; binding.pry
+        if complexity > max
+          report(
+            :path    => @current_path,
+            :line    => method.line,
+            :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
+              module_name,
+              class_method_flag ? "." : "#",
+              method.method_name,
+              complexity,
+              max,
+            ]
+          )
         end
       end
     end
