@@ -2,6 +2,8 @@ require "code_analyzer"
 
 module Guideline
   class UnusedMethodChecker < Checker
+    IGNORED_METHODS = %w[initialize]
+
     def check(path)
       definition_visitor.check(path.to_s, path.read)
       report_unused_methods(path)
@@ -62,7 +64,7 @@ module Guideline
 
     def unused_methods
       definitions.reject do |method|
-        calls.include?(method.name)
+        calls.include?(method.name) || IGNORED_METHODS.include?(method.name)
       end
     end
 
