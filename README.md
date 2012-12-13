@@ -21,17 +21,18 @@ $ gem install guideline
 ```
 $ guideline --help
 Usage: guideline [options]
-        --no-abc-complexity          (default: true) check method ABC complexity
-        --no-hard-tab-indent         (default: true) check hard tab indent
-        --no-hash-comma              (default: true) check last comma in Hash literal
-        --no-long-line               (default: true) check line length
-        --no-long-method             (default: true) check method height
-        --no-trailing-whitespace     (default: true) check trailing whitespace
-        --no-unused-method           (default: true) check unused method
-        --abc-complexity=            (default:   15) threshold of ABC complexity
-        --long-line=                 (default:   80) threshold of long line
-        --long-method=               (default:   10) threshold of long method
-        --path=                      (default:   ./) checked file or dir or glob pattern
+        --no-abc-complexity          (default: false) check method ABC complexity
+        --no-hard-tab-indent         (default: false) check hard tab indent
+        --no-hash-comma              (default: false) check last comma in Hash literal
+        --no-long-line               (default: false) check line length
+        --no-long-method             (default: false) check method height
+        --no-trailing-whitespace     (default: false) check trailing whitespace
+        --no-unused-method           (default: false) check unused method
+        --no-detail                  (default: false) only render summary
+        --abc-complexity=            (default:    15) threshold of ABC complexity
+        --long-line=                 (default:    80) threshold of long line
+        --long-method=               (default:    10) threshold of long method
+        --path=                      (default:    ./) checked file or dir or glob pattern
 ```
 
 ```
