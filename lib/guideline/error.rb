@@ -1,9 +1,16 @@
-require "ostruct"
-
 module Guideline
-  class Error < OpenStruct
+  class Error
+    attr_reader :line, :message, :path, :name
+
+    def initialize(options)
+      @line    = options[:line]
+      @message = options[:message]
+      @path    = options[:path]
+      @name    = options[:name]
+    end
+
     def render
-      puts "%4d: %s" % [line, message]
+      "%4d: %s" % [line, message]
     end
   end
 end

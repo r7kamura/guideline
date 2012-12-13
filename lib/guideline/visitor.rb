@@ -25,12 +25,8 @@ module Guideline
       end
     end
 
-    def render
-      errors.group_by(&:path).each do |path, errors|
-        puts path
-        errors.sort_by(&:line).each(&:render)
-        puts
-      end
+    def errors
+      @errors ||= checkers.select(&:has_error?).map(&:errors).inject([], &:+)
     end
 
     private
@@ -45,10 +41,6 @@ module Guideline
 
     def pattern
       @pattern
-    end
-
-    def errors
-      @errors ||= checkers.select(&:has_error?).map(&:errors).inject([], &:+)
     end
   end
 end

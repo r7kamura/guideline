@@ -56,25 +56,5 @@ module Guideline
         end
       end
     end
-
-    describe "#render" do
-      before do
-        visitor.instance_variable_set(:@errors, errors)
-        visitor.stub(:puts)
-      end
-
-      let(:errors) do
-        [error]
-      end
-
-      let(:error) do
-        mock(:path => "path", :line => 1)
-      end
-
-      it "calls #render of each error" do
-        error.should_receive(:render)
-        visitor.render
-      end
-    end
   end
 end

@@ -5,15 +5,25 @@ module Guideline
     end
 
     def run
-      visitor.prepare
-      visitor.visit
-      visitor.render
+      puts renderer.detail if options[:detail] != false
+      puts
+      puts renderer.summary
     end
 
     private
 
+    def renderer
+      @renderer ||= Renderer.new(errors)
+    end
+
     def visitor
       @visitor ||= Visitor.new(options[:path], enable_checkers)
+    end
+
+    def errors
+      visitor.prepare
+      visitor.visit
+      visitor.errors
     end
 
     def enable_checkers

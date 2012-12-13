@@ -1,6 +1,7 @@
 require "guideline/version"
 require "guideline/path_finder"
 require "guideline/visitor"
+require "guideline/renderer"
 require "guideline/error"
 require "guideline/option_parser"
 require "guideline/runner"
