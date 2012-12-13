@@ -2,111 +2,62 @@ require "spec_helper"
 
 module Guideline
   describe Runner do
-    describe ".parse" do
+    let(:runner) do
+      described_class.new
+    end
+
+    describe ".run" do
+      it "creates its instance and call #run" do
+        described_class.any_instance.should_receive(:run)
+        described_class.run
+      end
+    end
+
+    describe "#run" do
+      before do
+        runner.stub(:enable_checkers => enable_checkers)
+      end
+
+      let(:enable_checkers) do
+        [checker]
+      end
+
+      let(:checker) do
+        mock(:has_error? => false)
+      end
+
+      it "runs enable checkers" do
+        checker.should_receive(:check).at_least(1)
+        runner.run
+      end
+    end
+
+    describe "#enable_checkers" do
       subject do
-        described_class.parse(argv)
+        runner.send(:enable_checkers)
       end
 
       before do
-        runner.stub(:puts)
+        runner.stub(:options => options)
       end
 
-      let(:argv) do
-        []
-      end
-
-      let(:runner) do
-        described_class.any_instance
-      end
-
-      it { should be_a HashWithIndifferentAccess }
-
-      context "when given --init option" do
-        let(:argv) do
-          ["--init"]
+      context "when options[:abc_complexity] is false" do
+        let(:options) do
+          { :abc_complexity => false }
         end
 
-        context "when config file already exists" do
-          before do
-            File.stub(:exist? => true)
-          end
-
-          it "does not generate config file" do
-            FileUtils.should_not_receive(:copy)
-            expect { subject }.to raise_error(SystemExit)
-          end
-        end
-
-        context "when config file does not exist" do
-          before do
-            File.stub(:exist? => false)
-          end
-
-          it "generates config file" do
-            FileUtils.should_receive(:copy)
-            expect { subject }.to raise_error(SystemExit)
-          end
+        it "does not include AbcComplexityChecker" do
+          should_not be_any {|checker| checker.is_a?(AbcComplexityChecker) }
         end
       end
 
-      context "when given --version option" do
-        let(:argv) do
-          ["--version"]
+      context "when options[:abc_complexity] is nil" do
+        let(:options) do
+          {}
         end
 
-        it "shows current version number and exit" do
-          runner.should_receive(:puts).with(VERSION)
-          expect { subject }.to raise_error(SystemExit)
-        end
-      end
-
-      context "when not given --config option" do
-        it "returns default config parsed from guideline.yml" do
-          should == {
-            "config" => {
-              "Guideline::LongLineChecker" => {
-                "max" => 80,
-              },
-              "Guideline::LongMethodChecker" => {
-                "max" => 10,
-              },
-              "Guideline::AbcComplexityChecker" => {
-                "max" => 10,
-              },
-            },
-            "init" => nil,
-            "version" => nil,
-          }
-        end
-      end
-
-      context "when existent file is specified by --config option" do
-        let(:argv) do
-          ["--config", "existent.yml"]
-        end
-
-        before do
-          YAML.stub(:load_file).and_return("a" => "b")
-        end
-
-        it "returns config parsed from specified file" do
-          should == {
-            "config" => {
-              "a" => "b",
-            },
-            "init" => nil,
-            "version" => nil,
-          }
-        end
-      end
-
-      context "when non-existent file is specified by --config option" do
-        let(:argv) do
-          ["--config", "non-existent.yml"]
-        end
-
-        it do
-          expect { subject }.to raise_error
+        it "includes AbcComplexityChecker" do
+          should be_any {|checker| checker.is_a?(AbcComplexityChecker) }
         end
       end
     end

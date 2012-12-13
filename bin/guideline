@@ -2,22 +2,5 @@
 
 $LOAD_PATH.unshift File.expand_path("../../lib/", __FILE__)
 require "guideline"
-include Guideline
 
-options = Runner.parse(ARGV)
-
-checkers = CheckerFactory.new(
-  options[:config],
-  AbcComplexityChecker,
-  HardTabIndentChecker,
-  HashCommaChecker,
-  LongLineChecker,
-  LongMethodChecker,
-  TrailingWhitespaceChecker,
-  UnusedMethodChecker,
-).create
-
-visitor = Visitor.new(:only => ARGV[0], :checker => checkers)
-visitor.prepare
-visitor.visit
-visitor.render
+Guideline::Runner.run

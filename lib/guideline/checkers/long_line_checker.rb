@@ -1,5 +1,7 @@
 module Guideline
   class LongLineChecker < Checker
+    DEFAULT_MAX = 80
+
     def check(path)
       lines(path).select(&:has_error?).each do |line|
         report(
@@ -19,7 +21,7 @@ module Guideline
     end
 
     def max
-      @options[:max]
+      (@options[:max] || DEFAULT_MAX).to_i
     end
 
     class LineChecker

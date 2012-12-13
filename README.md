@@ -20,15 +20,22 @@ $ gem install guideline
 ## Usage
 ```
 $ guideline --help
-Usage: guideline [directory] [options]
-    -c, --config       Path to config YAML file.
-    -i, --init         Generate config YAML template into current directory.
-    -v, --version      Show version number.
-    -h, --help         Display this help message.
+Usage: guideline [options]
+        --no-abc-complexity          (default: true) check method ABC complexity
+        --no-hard-tab-indent         (default: true) check hard tab indent
+        --no-hash-comma              (default: true) check last comma in Hash literal
+        --no-long-line               (default: true) check line length
+        --no-long-method             (default: true) check method height
+        --no-trailing-whitespace     (default: true) check trailing whitespace
+        --no-unused-method           (default: true) check unused method
+        --abc-complexity=            (default:   15) threshold of ABC complexity
+        --long-line=                 (default:   80) threshold of long line
+        --long-method=               (default:   10) threshold of long method
+        --path=                      (default:   ./) checked file or dir or glob pattern
 ```
 
 ```
-$ guideline ./chatroid
+$ guideline --path /path/to/chatroid
 
 lib/chatroid/adapter/campfire.rb
   26: Line length  85 should be less than  80 characters
@@ -47,7 +54,7 @@ lib/chatroid/adapter/twitter.rb
 ```
 
 ```
-$ guideline ./guideline
+$ guideline --path /path/to/guideline
 
 lib/guideline/checkers/abc_complexity_checker.rb
   40: ABC Complexity of method<Guideline::AbcComplexityChecker::Moduleable.included> 16 should be less than 10

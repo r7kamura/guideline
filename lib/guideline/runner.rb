@@ -1,96 +1,63 @@
-require "yaml"
-require "fileutils"
-require "slop"
-require "active_support/core_ext/hash/indifferent_access"
-
 module Guideline
   class Runner
-    CONFIG_FILE_NAME = ".guideline.yml"
-
-    def self.parse(*argv)
-      new(*argv).parse
+    def self.run
+      new.run
     end
 
-    def initialize(argv)
-      @hash = Parser.parse(argv).with_indifferent_access
-    end
-
-    def parse
-      before_hook
-      @hash[:config] = load_config
-      @hash.delete(:help)
-      @hash
+    def run
+      visitor.prepare
+      visitor.visit
+      visitor.render
     end
 
     private
 
-    def before_hook
-      case
-      when @hash[:init]
-        generate_default_config_file
-      when @hash[:version]
-        show_version
-      end
+    def visitor
+      @visitor ||= Visitor.new(options[:path], enable_checkers)
     end
 
-    def show_version
-      puts VERSION
-      exit
+    def enable_checkers
+      array = []
+      array << abc_complexity_checker      if options[:abc_complexity]      != false
+      array << hard_tab_indent_checker     if options[:hard_tab_indent]     != false
+      array << hash_comma_checker          if options[:hash_comma]          != false
+      array << long_line_checker           if options[:long_line]           != false
+      array << long_method_checker         if options[:long_method]         != false
+      array << trailing_whitespace_checker if options[:trailing_whitespace] != false
+      array << unused_method_checker       if options[:unused_method]       != false
+      array
     end
 
-    def load_config
-      YAML.load_file(config_path)
-    rescue Errno::ENOENT
-      puts "No such config file - #{config_path}"
-      exit
+    def options
+      @options ||= OptionParser.parse
     end
 
-    def config_path
-      @hash[:config] || default_config_path
+    def abc_complexity_checker
+      AbcComplexityChecker.new(:max => options[:abc_complexity])
     end
 
-    def default_config_path
-      File.expand_path("../../../#{CONFIG_FILE_NAME}", __FILE__)
+    def hard_tab_indent_checker
+      HardTabIndentChecker.new
     end
 
-    def generate_default_config_file
-      if config_file_exist?
-        puts "./#{CONFIG_FILE_NAME} already exists"
-      else
-        FileUtils.copy(default_config_path, "./")
-        puts "./#{CONFIG_FILE_NAME} was generated"
-      end
-      exit
+    def hash_comma_checker
+      HashCommaChecker.new
     end
 
-    def config_file_exist?
-      File.exist?(CONFIG_FILE_NAME)
+    def long_line_checker
+      LongLineChecker.new(:max => options[:long_line])
     end
 
-    class Parser
-      def self.parse(argv)
-        new(argv).parse
-      end
+    def long_method_checker
+      LongMethodChecker.new(:max => options[:long_method])
+    end
 
-      def initialize(argv)
-        @argv = argv
-      end
+    def trailing_whitespace_checker
+      TrailingWhitespaceChecker.new
+    end
 
-      def parse
-        slop.parse(@argv)
-        slop.to_hash
-      end
-
-      private
-
-      def slop
-        @slop ||= Slop.new(:help => true) do
-          banner "Usage: guideline [directory] [options]"
-          on :c=, :config=, "Path to config YAML file."
-          on :i, :init, "Generate config YAML template into current directory."
-          on :v, :version, "Show version number."
-        end
-      end
+    def unused_method_checker
+      UnusedMethodChecker.new
     end
   end
 end

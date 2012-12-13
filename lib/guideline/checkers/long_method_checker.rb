@@ -3,6 +3,8 @@ require "ostruct"
 
 module Guideline
   class LongMethodChecker < Checker
+    DEFAULT_MAX = 10
+
     def check(path)
       MethodParser.parse(path.read) do |method|
         if method.height > max
@@ -18,7 +20,7 @@ module Guideline
     private
 
     def max
-      @options[:max] || 50
+      (@options[:max] || DEFAULT_MAX).to_i
     end
 
     class Method < OpenStruct

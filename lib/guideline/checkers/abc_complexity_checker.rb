@@ -2,6 +2,8 @@ require "code_analyzer"
 
 module Guideline
   class AbcComplexityChecker < Checker
+    DEFAULT_MAX = 15
+
     def check(path)
       @current_path = path
       visitor.check(path.to_s, path.read)
@@ -12,22 +14,18 @@ module Guideline
 
     def checker
       AbcParser.new do |complexity, method, module_name, class_method_flag|
-        begin
-          if complexity > max
-            report(
-              :path    => @current_path,
-              :line    => method.line,
-              :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
-                module_name,
-                class_method_flag ? "." : "#",
-                method.method_name,
-                complexity,
-                max,
-              ]
-            )
-          end
-        rescue Exception
-          require "pry"; binding.pry
+        if complexity > max
+          report(
+            :path    => @current_path,
+            :line    => method.line,
+            :message => "ABC Complexity of method<%s%s%s>%3d should be less than %d" % [
+              module_name,
+              class_method_flag ? "." : "#",
+              method.method_name,
+              complexity,
+              max,
+            ]
+          )
         end
       end
     end
@@ -37,7 +35,7 @@ module Guideline
     end
 
     def max
-      @options[:max]
+      (@options[:max] || DEFAULT_MAX).to_i
     end
 
     class AbcParser <  CodeAnalyzer::Checker

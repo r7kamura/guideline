@@ -4,9 +4,9 @@ module Guideline
   class Visitor
     attr_reader :options
 
-    def initialize(options, &block)
-      @options = options
-      @block   = block
+    def initialize(pattern, checkers)
+      @pattern  = pattern
+      @checkers = checkers
     end
 
     def visit
@@ -36,59 +36,19 @@ module Guideline
     private
 
     def paths
-      PathFinder.find(options)
+      PathFinder.find(pattern)
     end
 
     def checkers
-      @checkers ||= Array(options[:checker])
+      @checkers
+    end
+
+    def pattern
+      @pattern
     end
 
     def errors
       @errors ||= checkers.select(&:has_error?).map(&:errors).inject([], &:+)
-    end
-
-    class PathFinder
-      attr_reader :options
-
-      def self.find(options = {})
-        new(options).paths
-      end
-
-      def initialize(options = {})
-        @options = options
-      end
-
-      def paths
-        (found_paths - excepted_paths).select(&:exist?)
-      end
-
-      private
-
-      def found_paths
-        Pathname.glob(only_pattern)
-      end
-
-      def excepted_paths
-        if except_pattern
-          Pathname.glob(except_pattern)
-        else
-          []
-        end
-      end
-
-      def only_pattern
-        if options[:only]
-          File.expand_path(options[:only])
-        else
-          File.expand_path("**/*.rb")
-        end
-      end
-
-      def except_pattern
-        if options[:except]
-          File.expand_path(options[:except])
-        end
-      end
     end
   end
 end
