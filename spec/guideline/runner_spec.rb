@@ -15,7 +15,10 @@ module Guideline
 
     describe "#run" do
       before do
-        runner.stub(:enable_checkers => enable_checkers)
+        runner.stub(
+          :enable_checkers => enable_checkers,
+          :puts            => nil
+        )
       end
 
       let(:enable_checkers) do
