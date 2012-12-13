@@ -106,6 +106,20 @@ module Guideline
           checker.check(path)
         end
       end
+
+      context "when there is method to be ignored" do
+        let(:script) do
+          <<-EOF
+            def initialize
+            end
+          EOF
+        end
+
+        it "ignores it" do
+          checker.should_not_receive(:report)
+          checker.check(path)
+        end
+      end
     end
   end
 end
